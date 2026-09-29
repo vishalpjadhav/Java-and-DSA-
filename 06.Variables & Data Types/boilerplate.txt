@@ -1,0 +1,80 @@
+## Java Boilerplate Code
+
+Boilerplate code is the basic structure required to write and run a Java program.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+
+        // Your code goes here
+
+    }
+}
+```
+
+---
+
+## Explanation
+
+### `public class Main`
+
+* Defines a class named `Main`.
+* In Java, every program must be inside a class.
+
+### `public static void main(String[] args)`
+
+* This is the **main method**.
+* Program execution starts from this method.
+
+#### `public`
+
+* Accessible from anywhere.
+
+#### `static`
+
+* Allows the method to be called without creating an object of the class.
+
+#### `void`
+
+* Means the method does not return any value.
+
+#### `String[] args`
+
+* Stores command-line arguments as an array of strings.
+
+---
+
+## Example Program
+
+```java
+public class Main {
+    public static void main(String[] args) {
+
+        System.out.println("Hello, World!");
+
+    }
+}
+```
+
+### Output
+
+```text
+Hello, World!
+```
+
+---
+
+## For Your DSA Notes
+
+**Definition:**
+Java Boilerplate Code is the minimum code structure required to create and run a Java program. It contains a class declaration and the `main()` method, which acts as the entry point of the program.
+
+### Structure
+
+```java
+public class Main {
+    public static void main(String[] args) {
+
+    }
+}
+```

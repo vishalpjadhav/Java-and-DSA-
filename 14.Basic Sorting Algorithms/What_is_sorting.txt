@@ -1,0 +1,14 @@
+Sorting :- Sorting means arranging elements in a particular order, usually ascending or descending order.
+
+Ex :- 
+    Before :- 5, 3, 4, 1, 2
+    After  :- 1, 2, 3, 4, 5
+
+
+Basic Sorting Algorithms are :- 
+    - Bubble Sort 
+    - Selection Sort
+    - Insertion Sort
+    - Counting Sort 
+
+    
