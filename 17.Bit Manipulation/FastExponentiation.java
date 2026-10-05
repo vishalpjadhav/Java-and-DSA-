@@ -1,5 +1,5 @@
-public class fast_exponentiation {
-    public static int fast_exponentiation(int a, int n) {
+public class FastExponentiation {
+    public static int fast_Exponentiation(int a, int n) {
         int ans = 1;
         while (n > 0) {
             if ((n & 1) != 0) {
@@ -12,6 +12,6 @@ public class fast_exponentiation {
     }
 
     public static void main(String[] args) {
-        System.out.println(fast_exponentiation(5, 3));
+        System.out.println(fast_Exponentiation(5, 3));
     }
 }
