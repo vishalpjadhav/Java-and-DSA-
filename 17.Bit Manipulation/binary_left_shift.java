@@ -4,5 +4,6 @@ public class binary_left_shift {
        System.out.println(10<<1);
        System.out.println(10<<2);
        System.out.println(10<<3);
+       System.out.println(a << 1);
     }
 }
