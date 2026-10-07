@@ -17,7 +17,7 @@ class Student {
     Student(){
         System.out.println("NO-Arguments constructor ...");
     }
-    Student(String name){
+    Student(String name){  // Parameterized Constructor
         this.name = name;
     }
     Student(int roll_no){
