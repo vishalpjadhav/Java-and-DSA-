@@ -1,5 +1,6 @@
 public class Types_constructor {
     public static void main(String[] args) {
+        Student s3 = new Student();
         Student s1 = new Student("vishal");
         Student s2 = new Student(1004);
         System.out.println(s1.roll_no);
