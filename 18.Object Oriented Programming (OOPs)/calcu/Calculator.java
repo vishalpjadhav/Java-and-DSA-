@@ -12,8 +12,4 @@ public class Calculator {
     public int mul(int a, int b) {
         return a * b;
     }
-
-    // psvm for testing this class directly
-    public static void main(String[] args) {
-    }
 }
