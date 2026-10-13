@@ -8,19 +8,21 @@ public class StaticKeyword {
 
         Student s2 = new Student();
         s2.name = "Vaibhav";
-        System.out.println(s2.name+" "+ s2.college);
+        System.out.println(s2.name + " " + s2.college);
 
     }
 }
+
 class Student {
     static String college;
     String name;
     int age;
 
-    void setName(String name){
+    void setName(String name) {
         this.name = name;
     }
-    String getname(){
+
+    String getname() {
         return this.name;
     }
 }
