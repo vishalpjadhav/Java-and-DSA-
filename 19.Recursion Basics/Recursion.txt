@@ -1,0 +1,875 @@
+# Recursion in Java
+
+Recursion is an important concept in **Java and Data Structures & Algorithms (DSA)**. It is used to solve problems by breaking them into smaller versions of the same problem.
+
+Let's understand recursion from the basics, with Java code, dry runs, and examples.
+
+## 1. What Is Recursion?
+
+**Recursion is a programming technique in which a method calls itself to solve a problem.**
+
+Instead of solving the entire problem at once, the method solves a smaller part of the problem and continues calling itself until it reaches a condition that stops the recursive calls.
+
+### Real-Life Example
+
+Imagine you ask your friend:
+
+* You: What is the answer to this question?
+* Friend: I don't know. Ask another friend.
+* That friend: I don't know either. Ask another friend.
+* Eventually, someone knows the answer.
+* The answer is passed back through the chain.
+
+This resembles recursion: a problem is passed through repeated calls until a stopping condition is reached.
+
+However, in programming, recursion must have a proper stopping condition. Otherwise, the method keeps calling itself until the program encounters a `StackOverflowError`.
+
+---
+
+## 2. Structure of Recursion
+
+A recursive method generally has two important parts.
+
+### 1. Base Case
+
+The **base case** is the condition that stops recursion.
+
+Without a base case, the method may call itself indefinitely.
+
+### 2. Recursive Case
+
+The **recursive case** is the part where a method calls itself, usually with a smaller or simpler input.
+
+### General Syntax
+
+```java
+returnType methodName(parameters) {
+
+    if (baseCondition) {
+        return result;
+    }
+
+    // Recursive call
+    return methodName(smallerInput);
+}
+```
+
+**Remember:**
+
+* Base case → Stops recursion.
+* Recursive case → Calls the method again.
+* Each recursive call generally works toward reaching the base case.
+
+---
+
+# 3. First Java Recursion Example
+
+Let's write a simple program that prints numbers from 1 to 5 using recursion.
+
+### Code
+
+```java
+public class Main {
+
+    static void printNumbers(int n) {
+
+        if (n > 5) {
+            return;
+        }
+
+        System.out.println(n);
+
+        printNumbers(n + 1);
+    }
+
+    public static void main(String[] args) {
+
+        printNumbers(1);
+    }
+}
+```
+
+### Output
+
+```text
+1
+2
+3
+4
+5
+```
+
+### Understanding the Code
+
+**Step 1: Method call**
+
+```java
+printNumbers(1);
+```
+
+The method receives `n = 1`.
+
+**Step 2: Check the base case**
+
+```java
+if (n > 5) {
+    return;
+}
+```
+
+Since `1 > 5` is false, the method continues.
+
+**Step 3: Print the number**
+
+```java
+System.out.println(n);
+```
+
+It prints `1`.
+
+**Step 4: Recursive call**
+
+```java
+printNumbers(n + 1);
+```
+
+Since `n = 1`, this becomes:
+
+```java
+printNumbers(2);
+```
+
+The same process repeats with `2`, `3`, `4`, and `5`.
+
+When `n` becomes `6`, the base case is true, so the method returns without printing anything.
+
+### Dry Run
+
+| Method Call       | Condition `n > 5` | Action                            |
+| ----------------- | ----------------- | --------------------------------- |
+| `printNumbers(1)` | False             | Prints 1, calls `printNumbers(2)` |
+| `printNumbers(2)` | False             | Prints 2, calls `printNumbers(3)` |
+| `printNumbers(3)` | False             | Prints 3, calls `printNumbers(4)` |
+| `printNumbers(4)` | False             | Prints 4, calls `printNumbers(5)` |
+| `printNumbers(5)` | False             | Prints 5, calls `printNumbers(6)` |
+| `printNumbers(6)` | True              | Returns and stops                 |
+
+Notice that every call has its own value of `n`.
+
+---
+
+# 4. How Does Recursion Work Internally?
+
+This is one of the most important parts of recursion.
+
+Java uses a memory area called the **call stack** to manage method calls.
+
+Whenever a method is called, Java maintains information about that call, including its parameters and where execution should continue when the method returns.
+
+When a method calls itself, another method-call frame is created on the stack.
+
+Consider this method:
+
+```java
+static void show(int n) {
+
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+
+    show(n - 1);
+}
+```
+
+Suppose we call:
+
+```java
+show(3);
+```
+
+### Phase 1: Recursive Calls
+
+The method keeps calling itself with smaller values.
+
+```text
+show(3)
+   |
+   | prints 3
+   v
+show(2)
+   |
+   | prints 2
+   v
+show(1)
+   |
+   | prints 1
+   v
+show(0)
+   |
+   | base case reached
+   v
+Return
+```
+
+The output is:
+
+```text
+3
+2
+1
+```
+
+### Phase 2: Returning from Calls
+
+When `show(0)` reaches the base case, it returns.
+
+The previous calls then finish and return as well.
+
+```text
+show(0) returns
+     ↑
+show(1) returns
+     ↑
+show(2) returns
+     ↑
+show(3) returns
+```
+
+Because the method prints before making the recursive call, the numbers appear in descending order.
+
+**Important:** Recursive calls go deeper into the call stack, and returning unwinds the stack.
+
+---
+
+# 5. Print Numbers in Increasing and Decreasing Order
+
+Let's understand how the position of a recursive call changes the output.
+
+### A. Print in Increasing Order
+
+```java
+public class Main {
+
+    static void printIncreasing(int n) {
+
+        if (n == 0) {
+            return;
+        }
+
+        printIncreasing(n - 1);
+
+        System.out.println(n);
+    }
+
+    public static void main(String[] args) {
+
+        printIncreasing(5);
+    }
+}
+```
+
+**Output:**
+
+```text
+1
+2
+3
+4
+5
+```
+
+### Why?
+
+The recursive call happens before the print statement.
+
+Java keeps making recursive calls until it reaches `printIncreasing(0)`.
+
+Only after that call returns does it start printing the numbers.
+
+The execution order is:
+
+```text
+Calls going deeper:
+
+printIncreasing(5)
+printIncreasing(4)
+printIncreasing(3)
+printIncreasing(2)
+printIncreasing(1)
+printIncreasing(0)  ← Base case
+```
+
+Then the calls return:
+
+```text
+printIncreasing(1) → prints 1
+printIncreasing(2) → prints 2
+printIncreasing(3) → prints 3
+printIncreasing(4) → prints 4
+printIncreasing(5) → prints 5
+```
+
+### B. Print in Decreasing Order
+
+```java
+static void printDecreasing(int n) {
+
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+
+    printDecreasing(n - 1);
+}
+```
+
+Calling:
+
+```java
+printDecreasing(5);
+```
+
+Output:
+
+```text
+5
+4
+3
+2
+1
+```
+
+### Difference
+
+| Increasing Order                       | Decreasing Order                           |
+| -------------------------------------- | ------------------------------------------ |
+| Recursive call occurs before printing. | Printing occurs before the recursive call. |
+| Numbers print while calls return.      | Numbers print while calls go deeper.       |
+| Example: `1 2 3 4 5`                   | Example: `5 4 3 2 1`                       |
+
+---
+
+# 6. Factorial Using Recursion
+
+The factorial of a positive integer is the product of all positive integers from 1 to that number.
+
+For example:
+
+$$
+5! = 5 \times 4 \times 3 \times 2 \times 1 = 120
+$$
+
+Also:
+
+$$
+0! = 1
+$$
+
+### Mathematical Formula
+
+We can define factorial recursively:
+
+$$
+n! = n \times (n-1)!
+$$
+
+The base case is:
+
+$$
+0! = 1
+$$
+
+### Java Code
+
+```java
+public class Main {
+
+    static int factorial(int n) {
+
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+
+        return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+
+        int result = factorial(5);
+
+        System.out.println(result);
+    }
+}
+```
+
+### Output
+
+```text
+120
+```
+
+### Understanding This Statement
+
+```java
+return n * factorial(n - 1);
+```
+
+Suppose `n = 5`.
+
+The expression becomes:
+
+```java
+return 5 * factorial(4);
+```
+
+But Java doesn't yet know the result of `factorial(4)`.
+
+Therefore, it calls `factorial(4)` to calculate that result.
+
+This continues until the base case is reached.
+
+### Complete Dry Run
+
+Suppose we call:
+
+```java
+factorial(5);
+```
+
+**Phase 1: Recursive calls**
+
+```text
+factorial(5)
+    = 5 * factorial(4)
+
+factorial(4)
+    = 4 * factorial(3)
+
+factorial(3)
+    = 3 * factorial(2)
+
+factorial(2)
+    = 2 * factorial(1)
+
+factorial(1)
+    = 1  ← Base case
+```
+
+**Phase 2: Returning results**
+
+Now Java starts calculating the pending expressions.
+
+```text
+factorial(1) = 1
+
+factorial(2) = 2 * 1
+             = 2
+
+factorial(3) = 3 * 2
+             = 6
+
+factorial(4) = 4 * 6
+             = 24
+
+factorial(5) = 5 * 24
+             = 120
+```
+
+Finally:
+
+```java
+System.out.println(result);
+```
+
+prints `120`.
+
+### Why Do We Use `return`?
+
+Consider:
+
+```java
+return n * factorial(n - 1);
+```
+
+The recursive call produces a value, and `return` passes the calculated result back to the method's caller.
+
+If we wrote this instead:
+
+```java
+factorial(n - 1);
+```
+
+the returned value would not be used in the multiplication.
+
+**Important:** Factorial of `0` is `1`. For this example, use non-negative inputs; sufficiently large factorials can exceed the range of Java's `int` type.
+
+---
+
+# 7. Sum of First N Natural Numbers
+
+Suppose we want to calculate the sum of the first five natural numbers.
+
+$$
+S = 1 + 2 + 3 + 4 + 5 = 15
+$$
+
+We can express the problem recursively:
+
+$$
+S(n) = n + S(n-1)
+$$
+
+The base case is:
+
+$$
+S(0) = 0
+$$
+
+### Java Code
+
+```java
+public class Main {
+
+    static int sum(int n) {
+
+        if (n == 0) {
+            return 0;
+        }
+
+        return n + sum(n - 1);
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(sum(5));
+    }
+}
+```
+
+**Output:**
+
+```text
+15
+```
+
+### Dry Run
+
+```text
+sum(5) = 5 + sum(4)
+sum(4) = 4 + sum(3)
+sum(3) = 3 + sum(2)
+sum(2) = 2 + sum(1)
+sum(1) = 1 + sum(0)
+sum(0) = 0
+```
+
+Returning results:
+
+```text
+sum(1) = 1 + 0  = 1
+sum(2) = 2 + 1  = 3
+sum(3) = 3 + 3  = 6
+sum(4) = 4 + 6  = 10
+sum(5) = 5 + 10 = 15
+```
+
+---
+
+# 8. Fibonacci Series Using Recursion
+
+The Fibonacci sequence is a sequence in which each number is the sum of the previous two numbers.
+
+The sequence begins:
+
+```text
+0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+```
+
+### Recursive Formula
+
+$$
+F(n) = F(n-1) + F(n-2)
+$$
+
+Base cases:
+
+$$
+F(0) = 0,\qquad F(1) = 1
+$$
+
+### Java Code
+
+```java
+public class Main {
+
+    static int fibonacci(int n) {
+
+        if (n == 0) {
+            return 0;
+        }
+
+        if (n == 1) {
+            return 1;
+        }
+
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(fibonacci(6));
+    }
+}
+```
+
+**Output:**
+
+```text
+8
+```
+
+### Dry Run
+
+```text
+fibonacci(6)
+= fibonacci(5) + fibonacci(4)
+
+= (fibonacci(4) + fibonacci(3))
+  + (fibonacci(3) + fibonacci(2))
+```
+
+Each call continues until it reaches `fibonacci(0)` or `fibonacci(1)`.
+
+Then Java combines the returned values to calculate the result.
+
+The sequence by index is:
+
+| Index `n` | `fibonacci(n)` |
+| --------: | -------------: |
+|         0 |              0 |
+|         1 |              1 |
+|         2 |              1 |
+|         3 |              2 |
+|         4 |              3 |
+|         5 |              5 |
+|         6 |              8 |
+
+**Important:** This basic recursive Fibonacci implementation repeats many calculations. Its time complexity is exponential, approximately \(O(2^n)\). It is useful for learning recursion, but it is not an efficient implementation for large values of `n`.
+
+---
+
+# 9. What Happens If We Don't Write a Base Case?
+
+Consider this incorrect program:
+
+```java
+static void print(int n) {
+
+    System.out.println(n);
+
+    print(n + 1);
+}
+```
+
+If we call:
+
+```java
+print(1);
+```
+
+The method prints numbers and keeps calling itself:
+
+```text
+1
+2
+3
+4
+5
+...
+```
+
+There is no condition to stop the recursive calls.
+
+Eventually, Java typically throws a:
+
+```text
+StackOverflowError
+```
+
+This happens because the call stack has limited capacity.
+
+**Rule:** Every recursive solution must have a valid path to its base case.
+
+---
+
+# 10. Recursion vs Iteration
+
+Iteration means repeating a set of instructions using loops such as `for` and `while`.
+
+Recursion repeats work by calling a method again.
+
+| Recursion                                                          | Iteration                                                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| Uses method calls.                                                 | Uses loops such as `for` and `while`.                                                |
+| Requires a suitable base case to stop recursive calls.             | Requires a loop condition to terminate.                                              |
+| Uses the call stack to manage active method calls.                 | A simple loop generally does not create a new method-call frame for every iteration. |
+| Can make code simpler for naturally recursive problems.            | Often more efficient for straightforward repetitive tasks.                           |
+| May throw `StackOverflowError` if recursive calls become too deep. | Avoids recursive stack growth for the loop itself.                                   |
+| Examples: tree traversal, recursive factorial, backtracking.       | Examples: printing numbers, linear search, iterative factorial.                      |
+
+### Example: Factorial Using a Loop
+
+```java
+static int factorial(int n) {
+
+    int result = 1;
+
+    for (int i = 1; i <= n; i++) {
+        result = result * i;
+    }
+
+    return result;
+}
+```
+
+For `factorial(5)`:
+
+```text
+Initially: result = 1
+
+i = 1 → result = 1 * 1 = 1
+i = 2 → result = 1 * 2 = 2
+i = 3 → result = 2 * 3 = 6
+i = 4 → result = 6 * 4 = 24
+i = 5 → result = 24 * 5 = 120
+```
+
+The answer is `120`, just as in the recursive version.
+
+---
+
+# 11. Advantages and Disadvantages of Recursion
+
+### Advantages
+
+1. **Simpler code:** Some problems can be expressed more naturally using recursion.
+2. **Problem decomposition:** A large problem can be broken into smaller versions of the same problem.
+3. **Useful for trees:** Recursive calls naturally handle left and right subtrees.
+4. **Useful for backtracking:** Recursion can explore different choices, such as paths through a maze.
+5. **Useful in DSA:** Recursion is an important foundation for merge sort, quicksort, tree traversal, and other algorithms.
+
+### Disadvantages
+
+1. **Memory usage:** Each active recursive call requires call-stack space.
+2. **Stack overflow:** Excessively deep recursion can exhaust the available stack.
+3. **Repeated calculations:** Some recursive solutions calculate the same results many times.
+4. **Debugging difficulty:** It can be harder to follow the order of calls and returns.
+5. **Performance overhead:** Method calls can introduce overhead compared with simple loops.
+
+---
+
+# 12. Time and Space Complexity of Recursion
+
+The complexity depends on how many recursive calls are made and how much work each call performs.
+
+Consider:
+
+```java
+static void count(int n) {
+
+    if (n == 0) {
+        return;
+    }
+
+    count(n - 1);
+}
+```
+
+If we call `count(5)`, the calls are:
+
+```text
+count(5)
+count(4)
+count(3)
+count(2)
+count(1)
+count(0)
+```
+
+There are `n + 1` calls for a non-negative input `n`.
+
+* **Time complexity:** \(O(n)\), because the method makes a linear number of calls.
+* **Auxiliary space complexity:** \(O(n)\), because up to `n + 1` method calls can be active at the same time.
+
+For other recursive algorithms, the complexity may be different. For example, the basic recursive Fibonacci algorithm has exponential time complexity.
+
+---
+
+# 13. Important Recursion Rules to Remember
+
+1. A recursive method calls itself, directly or indirectly.
+2. Every correct recursive solution needs an appropriate stopping condition.
+3. Each recursive call has its own parameters and method-call state.
+4. A recursive call may return a value to the calling method.
+5. Statements before the recursive call execute while the calls go deeper.
+6. Statements after the recursive call execute as those calls return.
+7. Java manages recursive method calls using the call stack.
+8. Deep or uncontrolled recursion can cause a `StackOverflowError`.
+9. Recursion is not always faster or more memory-efficient than iteration.
+10. Before writing recursive code, identify the **base case**, the **smaller subproblem**, and how the result is constructed.
+
+---
+
+# 14. Practice Questions
+
+Try solving these in Java, starting with the easy questions.
+
+### Easy Level
+
+1. Print numbers from `1` to `N` using recursion.
+2. Print numbers from `N` to `1` using recursion.
+3. Calculate the factorial of a number.
+4. Calculate the sum of the first `N` natural numbers.
+5. Calculate \(a^b\) using recursion, where `b` is a non-negative integer.
+
+### Medium Level
+
+6. Find the `N`th Fibonacci number using recursion.
+7. Calculate the sum of the digits of a number.
+8. Reverse a number using recursion.
+9. Check whether a string is a palindrome using recursion.
+10. Find the greatest common divisor (GCD) of two numbers using recursion.
+
+### Harder Level
+
+11. Find the maximum element in an array using recursion.
+12. Perform binary search using recursion on a sorted array.
+13. Check whether an array is sorted using recursion.
+14. Generate all subsequences of a string using recursion.
+15. Solve the Tower of Hanoi problem using recursion.
+
+---
+
+## Final Summary
+
+**Recursion = Base Case + Recursive Call + Returning Results.**
+
+For example:
+
+```java
+static int factorial(int n) {
+
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}
+```
+
+The method repeatedly calls itself with smaller values until it reaches the base case. Then, the pending calls return their results until the original call receives the final answer.
+
+**My recommendation:** Before moving to harder recursion problems, practise printing numbers, factorial, and the sum of natural numbers. Focus on understanding exactly **when a method is called, when it pauses, and when it returns**. This will make recursion much easier when you start solving DSA problems.
