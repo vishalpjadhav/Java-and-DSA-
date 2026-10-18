@@ -1,5 +1,5 @@
 
-public class ast_Occurence {
+public class last_Occurence {
     public static int last_Occurence(int arr[], int key, int i) {
         if (i == arr.length) {
             return -1;
