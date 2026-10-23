@@ -10,6 +10,6 @@ public class BinaryString {
         }
     }
     public static void main(String[] args) {
-         printBinaryString(4,0,"");
+         printBinaryString(3,0,"");
     }
 }
