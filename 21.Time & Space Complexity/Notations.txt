@@ -1,0 +1,205 @@
+# Time Complexity and Space Complexity in Java & DSA
+
+When analyzing an algorithm, we mainly consider two things: **Time Complexity** and **Space Complexity**.
+
+## 1. Time Complexity
+
+**Definition:** Time complexity describes how the number of operations performed by an algorithm grows as the input size increases.
+
+It does not measure the exact time in seconds. Instead, it describes how the algorithm's work grows with the input size `n`.
+
+### Example 1: O(1) — Constant Time
+
+```java
+int a = 10;
+System.out.println(a);
+```
+
+The code performs a fixed amount of work, regardless of the input size.
+
+**Time Complexity: O(1)**
+
+### Example 2: O(n) — Linear Time
+
+```java
+int[] arr = {10, 20, 30, 40, 50};
+
+for (int i = 0; i < arr.length; i++) {
+    System.out.println(arr[i]);
+}
+```
+
+The loop visits every element once.
+
+- 5 elements → 5 iterations
+    
+- 100 elements → 100 iterations
+    
+- `n` elements → `n` iterations
+    
+
+**Time Complexity: O(n)**
+
+### Example 3: O(n²) — Quadratic Time
+
+```java
+int n = 4;
+
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        System.out.println(i + " " + j);
+    }
+}
+```
+
+The outer loop runs `n` times, and the inner loop runs `n` times for each outer-loop iteration.
+
+Total iterations = `n × n = n²`.
+
+For `n = 4`, the total is 16 iterations.
+
+**Time Complexity: O(n²)**
+
+---
+
+## 2. Space Complexity
+
+**Definition:** Space complexity describes how the memory required by an algorithm grows as the input size increases.
+
+It can include memory used for variables, additional arrays, data structures, and the recursion stack.
+
+### Example 1: O(1) — Constant Auxiliary Space
+
+```java
+int a = 10;
+int b = 20;
+
+int sum = a + b;
+
+System.out.println(sum);
+```
+
+The algorithm uses a fixed number of variables.
+
+**Auxiliary Space Complexity: O(1)**
+
+### Example 2: O(n) — Linear Auxiliary Space
+
+```java
+int n = 5;
+int[] arr = new int[n];
+```
+
+The array stores `n` elements. Its memory requirement grows linearly with `n`.
+
+**Auxiliary Space Complexity: O(n)**
+
+**Important:** If an algorithm receives an array as input, the input array itself is usually excluded when calculating _auxiliary space complexity_. Auxiliary space refers to the additional memory used by the algorithm.
+
+---
+
+## 3. Common Time Complexities
+
+|Complexity|Name|Example|
+|---|---|---|
+|**O(1)**|Constant|Accessing an array element by index|
+|**O(log n)**|Logarithmic|Binary Search|
+|**O(n)**|Linear|Linear Search|
+|**O(n log n)**|Linearithmic|Merge Sort|
+|**O(n²)**|Quadratic|Bubble Sort in the average and worst cases|
+|**O(n³)**|Cubic|Three nested loops, each running `n` times|
+|**O(2ⁿ)**|Exponential|Naive recursive Fibonacci|
+|**O(n!)**|Factorial|Generating all permutations of `n` distinct elements|
+
+These are common patterns; the actual complexity depends on the algorithm and its implementation.
+
+## 4. How to Calculate Complexity
+
+Follow these basic rules:
+
+1. **Single statement:** Usually `O(1)`.
+    
+2. **Single loop running `n` times:** Usually `O(n)`.
+    
+3. **Two nested loops, each running `n` times:** Usually `O(n²)`.
+    
+4. **Repeatedly dividing the problem by two:** Often `O(log n)`.
+    
+5. **Consecutive operations:** Add their costs and keep the dominant term.
+    
+6. **Recursive algorithms:** Analyze both the work performed at each call and the number of calls.
+    
+
+### Example: Consecutive loops
+
+```java
+for (int i = 0; i < n; i++) {
+    System.out.println(i);
+}
+
+for (int j = 0; j < n; j++) {
+    System.out.println(j);
+}
+```
+
+The total number of iterations is:
+
+`n + n = 2n`
+
+We ignore constant factors in Big O notation.
+
+**Time Complexity: O(n)**
+
+---
+
+## 5. Best, Average, and Worst Cases
+
+|Case|Meaning|
+|---|---|
+|**Best Case**|The minimum work required for an input of size `n`.|
+|**Average Case**|The expected work over a distribution of inputs of size `n`.|
+|**Worst Case**|The maximum work required for an input of size `n`.|
+
+For example, in Linear Search:
+
+- **Best case:** The target is the first element → `O(1)`.
+    
+- **Average case:** The target is typically somewhere in the array → `O(n)`.
+    
+- **Worst case:** The target is last or absent → `O(n)`.
+    
+
+---
+
+## 6. What Is Big O Notation?
+
+**Big O notation** describes an asymptotic upper bound on how an algorithm's resource usage grows with input size.
+
+For example:
+
+- `O(1)` — constant growth
+    
+- `O(n)` — linear growth
+    
+- `O(n²)` — quadratic growth
+    
+
+When comparing algorithms, we generally focus on how their resource requirements grow for large inputs rather than their exact execution time on a particular computer.
+
+### Quick Practice
+
+Find the time complexity of this code:
+
+```java
+for (int i = 0; i < n; i++) {
+    System.out.println(i);
+}
+
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        System.out.println(i + " " + j);
+    }
+}
+```
+
+**Hint:** Calculate the complexity of each section separately, then keep the dominant term.
