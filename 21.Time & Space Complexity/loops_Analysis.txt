@@ -1,0 +1,23 @@
+simple loop analysis 
+
+
+for(int i=0; i<n; i++){
+    //some constant work
+    // is done in this loop 
+}
+
+
+loops operation :- 
+iteration----constant Work (k)
+i =0 ----> k
+i =1 ----> k
+i =2 ----> k
+i =3 ----> k
+|
+|
+|
+|
+i =n ----> k
+
+TC = n x k 
+ignore constant --- O(n)
