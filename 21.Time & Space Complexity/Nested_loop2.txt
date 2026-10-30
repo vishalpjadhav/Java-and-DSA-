@@ -1,0 +1,198 @@
+# Time Complexity & Loop Explanations
+
+---
+
+## 1. Nested Loop 2
+
+
+
+### Code
+
+
+
+```java
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < i; j++) {
+        // some constant work
+        // is done in this loop
+    }
+}
+
+```
+
+### Explanation
+
+
+
+* **Outer loop:** Runs $n$ times, with $i$ taking values from $0$ up to $n - 1$.
+
+
+* **Inner loop:** For a given $i$, the variable $j$ goes from $0$ to $i - 1$, executing the body exactly $i$ times.
+
+
+* **Trace of operations:**
+* $i = 0 \implies 0$ executions
+* $i = 1 \implies 1$ execution
+* $i = 2 \implies 2$ executions
+* $\dots$
+* $i = n - 1 \implies n - 1$ executions
+
+
+* **Total operations:**
+
+$$\text{Total} = 0 + 1 + 2 + \dots + (n - 1) = \frac{n(n - 1)}{2} = \frac{n^2 - n}{2}$$
+
+
+* **Time Complexity:** $\mathcal{O}(n^2)$
+
+---
+
+## 2. Nested Loop 3
+
+
+
+### Code
+
+
+
+```java
+// some k < n
+for (int i = 0; i < n; i = i + k) {
+    for (int j = i + 1; j <= k; j++) {
+        // some constant work
+        // is done in this loop
+    }
+}
+
+```
+
+### Explanation
+
+
+
+* **Outer loop:** Increments by $k$ each iteration ($i = 0, k, 2k, \dots$) as long as $i < n$.
+
+
+* **Inner loop:** Initializes at $j = i + 1$ and continues while $j \le k$.
+
+
+* **Trace of operations:**
+* **First iteration ($i = 0$):** $j$ starts at $1$ and runs up to $k$. The body runs **$k$ times**.
+
+
+* **Second iteration ($i = k$):** $j$ starts at $k + 1$. The condition `j <= k` is immediately false (`k + 1 <= k`), so it runs **$0$ times**.
+
+
+* **Subsequent iterations ($i \ge 2k$):** $j$ starts at values strictly greater than $k$, so the condition fails immediately and it runs **$0$ times**.
+
+
+* **Total operations:** The inner loop only executes during the very first turn of the outer loop ($k$ operations). The outer loop condition is evaluated $\approx \frac{n}{k}$ times.
+
+
+* **Time Complexity:** $\mathcal{O}(k + \frac{n}{k})$ *(reduces to $\mathcal{O}(n)$ if $k$ is treated as a constant)*
+
+---
+
+## 3. Standard Bubble Sort
+
+
+
+### Code
+
+
+
+```java
+public static void bubbleSort(int arr[]) {
+    for (int turn = 0; turn < arr.length - 1; turn++) {
+        for (int j = 0; j < arr.length - 1 - turn; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // swap
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+```
+
+### Explanation
+
+
+
+* **Mechanism:** In each outer turn, adjacent elements are compared and swapped if they are in the wrong order, placing the largest unsorted element into its correct final position at the end.
+
+
+* **Best Case (Already Sorted):**
+* There is no mechanism to detect that the array is already sorted.
+* Both loops will run all iterations regardless of element order.
+* **Complexity:** $\mathcal{O}(n^2)$
+
+
+* **Worst Case (Reverse Sorted):**
+* Every comparison results in a swap.
+
+
+* Total comparisons: $(n - 1) + (n - 2) + \dots + 1 = \frac{n(n - 1)}{2}$.
+* **Complexity:** $\mathcal{O}(n^2)$
+
+
+
+---
+
+## 4. Modified Bubble Sort (Optimized with Flag)
+
+
+
+### Code
+
+
+
+```java
+public static void modifiedBubbleSort(int arr[]) {
+    for (int turn = 0; turn < arr.length - 1; turn++) {
+        boolean swapped = false;
+        for (int j = 0; j < arr.length - 1 - turn; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // swap
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (swapped == false) {
+            break;
+        }
+    }
+}
+
+```
+
+### Explanation
+
+
+
+* **Mechanism:** Adds a boolean flag `swapped` set to `false` at the start of each turn. If any pair is swapped, `swapped` becomes `true`. If an entire pass finishes with `swapped == false`, the array is already sorted, and the outer loop terminates immediately.
+
+
+* **Best Case (Already Sorted):**
+* In the first pass (`turn = 0`), all $n - 1$ adjacent pairs are checked.
+
+
+* No swaps occur, so `swapped` remains `false`.
+
+
+* The `break` triggers after pass 1.
+
+
+* **Complexity:** $\mathcal{O}(n)$
+
+
+* **Worst Case (Reverse Sorted):**
+* Swaps occur in every pass, meaning `swapped` is always `true` until the final pass.
+
+
+* The loop runs the full set of iterations.
+* **Complexity:** $\mathcal{O}(n^2)$
