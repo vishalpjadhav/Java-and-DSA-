@@ -1,0 +1,123 @@
+Binary Search Complexity
+
+ # Binary Search: Time and Space Complexity
+
+Binary Search is an efficient searching algorithm that works on a **sorted array**. It repeatedly divides the search range into two halves until the target element is found or the search range becomes empty.
+
+## 1. Time Complexity
+
+| Case         | Time Complexity | Explanation                                                                                   |
+| ------------ | --------------- | --------------------------------------------------------------------------------------------- |
+| Best Case    | **O(1)**        | The target element is found at the middle position in the first comparison.                   |
+| Average Case | **O(log n)**    | The search space is repeatedly divided into halves.                                           |
+| Worst Case   | **O(log n)**    | The algorithm continues dividing until the target is found or the search range becomes empty. |
+
+### Why is the time complexity O(log n)?
+
+Consider a sorted array containing 16 elements.
+
+Binary Search divides the search space by 2 in every iteration:
+
+```text
+16 → 8 → 4 → 2 → 1
+```
+
+Number of divisions:
+
+$$
+\log_2 16 = 4
+$$
+
+Therefore, the worst-case time complexity is:
+
+$$
+\boxed{O(\log n)}
+$$
+
+**General formula:**
+
+$$
+\boxed{T(n) = O(\log_2 n)}
+$$
+
+---
+
+## 2. Space Complexity
+
+Space complexity depends on how Binary Search is implemented.
+
+### A. Iterative Binary Search
+
+Uses a loop instead of recursion.
+
+```java
+int binarySearch(int[] arr, int key) {
+    int low = 0;
+    int high = arr.length - 1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (arr[mid] == key)
+            return mid;
+        else if (arr[mid] < key)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+
+    return -1;
+}
+```
+
+* Uses only a fixed number of variables (`low`, `high`, `mid`).
+* Does not use a recursive call stack.
+
+**Auxiliary Space Complexity: O(1)**
+
+### B. Recursive Binary Search
+
+Uses recursive function calls to divide the search space.
+
+```java
+int binarySearch(int[] arr, int low, int high, int key) {
+
+    if (low > high)
+        return -1;
+
+    int mid = low + (high - low) / 2;
+
+    if (arr[mid] == key)
+        return mid;
+
+    if (arr[mid] < key)
+        return binarySearch(arr, mid + 1, high, key);
+
+    return binarySearch(arr, low, mid - 1, key);
+}
+```
+
+* Each recursive call divides the search space by 2.
+* The maximum recursion depth is proportional to `log n`.
+
+**Auxiliary Space Complexity: O(log n)**
+
+---
+
+## 3. Final Complexity Table
+
+| Complexity        | Iterative Binary Search | Recursive Binary Search |
+| ----------------- | ----------------------- | ----------------------- |
+| Best-case time    | O(1)                    | O(1)                    |
+| Average-case time | O(log n)                | O(log n)                |
+| Worst-case time   | O(log n)                | O(log n)                |
+| Auxiliary space   | **O(1)**                | **O(log n)**            |
+
+## 4. Important Points to Remember
+
+1. Binary Search requires a **sorted array**.
+2. It eliminates half of the remaining search elements in each iteration.
+3. Its worst-case time complexity is `O(log n)`.
+4. Iterative Binary Search uses `O(1)` auxiliary space.
+5. Recursive Binary Search uses `O(log n)` auxiliary space because of the recursion stack.
+6. Best-case time complexity is `O(1)` when the target is found at the middle in the first comparison.
