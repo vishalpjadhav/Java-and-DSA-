@@ -1,0 +1,70 @@
+FIBONACCI RECURSION – TIME AND SPACE COMPLEXITY
+
+1. TIME COMPLEXITY
+
+O(2ⁿ) – Exponential Time
+
+Why?
+
+Every recursive call generates two more recursive calls:
+
+fib(n - 1) + fib(n - 2)
+
+For example, fib(5) generates this recursive call tree:
+
+                 fib(5)
+                /      \
+            fib(4)     fib(3)
+           /    \      /    \
+       fib(3) fib(2) fib(2) fib(1)
+        ...
+
+Many Fibonacci values are calculated repeatedly.
+
+Therefore:
+
+Time Complexity: O(2ⁿ)
+
+More precisely, its time complexity is Θ(φⁿ), where φ is the golden ratio (approximately 1.618).
+
+2. SPACE COMPLEXITY
+
+O(n) – Linear Space
+
+Why?
+
+• Every recursive function call is stored in the call stack.
+• The maximum recursion depth is proportional to n.
+• The deepest recursive path is approximately:
+
+fib(n) → fib(n-1) → fib(n-2) → ... → fib(1)
+
+Therefore:
+
+Space Complexity: O(n)
+
+3. FINAL COMPLEXITY
+
+Complexity Type             Your Fibonacci Code
+
+Best-case time              O(1) for n = 0 or 1
+General time complexity     O(2ⁿ)
+Space complexity            O(n)
+Approach                    Recursion
+Repeated calculations      Yes
+
+IMPORTANT:
+
+The standard worst-case time complexity is Θ(φⁿ), commonly expressed using the simpler upper bound O(2ⁿ).
+
+INTERVIEW TAKEAWAY
+
+Your recursive Fibonacci solution:
+
+Time Complexity: O(2ⁿ)
+
+Space Complexity: O(n)
+
+Main drawback:
+
+Repeated calculation of the same Fibonacci values makes this approach inefficient for large inputs.
