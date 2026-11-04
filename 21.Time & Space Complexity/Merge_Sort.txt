@@ -1,0 +1,379 @@
+MERGE SORT – TIME AND SPACE COMPLEXITY
+
+1. UNDERSTANDING YOUR CODE
+
+Your code:
+
+public static void mergeSort(int arr[], int si, int ei) {
+    if(si >= ei) {
+        return;
+    }
+
+    int mid = si + (ei - si)/2;
+
+    mergeSort(arr, si, mid);
+    mergeSort(arr, mid+1, ei);
+
+    merge(arr, si, mid, ei);
+}
+
+Before calculating complexity, let's understand what each part does.
+
+Code                         Explanation
+
+if(si >= ei)                 Base condition. Stops recursion when the subarray contains only one element or is empty.
+
+int mid = si + (ei-si)/2     Calculates the middle index of the array.
+
+mergeSort(arr, si, mid)      Recursively divides the left half.
+
+mergeSort(arr, mid+1, ei)    Recursively divides the right half.
+
+merge(arr, si, mid, ei)      Combines both halves into a sorted subarray.
+
+Merge Sort follows the Divide and Conquer technique.
+
+It performs three main operations:
+
+1. Divide the array into two halves.
+2. Recursively sort both halves.
+3. Merge the sorted halves.
+
+
+2. TIME COMPLEXITY OF MERGE SORT
+
+Time complexity tells us how the number of operations grows when the input size increases.
+
+Let's understand it using an example.
+
+Suppose we have an array:
+
+int arr[] = {8, 4, 6, 2, 7, 1, 3, 5};
+
+Here:
+
+• Number of elements (n) = 8
+• The array is divided into two halves repeatedly.
+• Finally, all elements are merged in sorted order.
+
+STEP 1: UNDERSTANDING THE DIVISION
+
+Merge Sort divides the array as follows:
+
+                 [8, 4, 6, 2, 7, 1, 3, 5]
+                           /       \
+                          /         \
+                 [8, 4, 6, 2]     [7, 1, 3, 5]
+                    /    \           /    \
+                   /      \         /      \
+                [8, 4]  [6, 2]    [7, 1]  [3, 5]
+                 / \     / \       / \     / \
+                [8][4] [6][2]    [7][1] [3][5]
+
+The division continues until every subarray contains only one element.
+
+Why?
+
+Because an array containing a single element is already sorted.
+
+STEP 2: CALCULATE THE NUMBER OF LEVELS
+
+Let's observe the number of elements at each level.
+
+Level       Subarrays       Elements per subarray
+
+Level 0         1                   8
+Level 1         2                   4
+Level 2         4                   2
+Level 3         8                   1
+
+At every level, the array is divided into two halves.
+
+Therefore:
+
+8 → 4 → 2 → 1
+
+Mathematically:
+
+n / 2ᵏ = 1
+
+Where:
+
+• n = Number of elements.
+• k = Number of division levels.
+
+Solving:
+
+n / 2ᵏ = 1
+
+n = 2ᵏ
+
+k = log₂ n
+
+Therefore, the number of levels is:
+
+O(log n)
+
+STEP 3: CALCULATE THE WORK AT EACH LEVEL
+
+Now let's understand the merging operation.
+
+At each level, the merge() function combines the elements of two sorted subarrays.
+
+For example:
+
+[8] [4]  → [4, 8]
+
+[6] [2]  → [2, 6]
+
+[7] [1]  → [1, 7]
+
+[3] [5]  → [3, 5]
+
+At the next level:
+
+[4, 8] [2, 6] → [2, 4, 6, 8]
+
+[1, 7] [3, 5] → [1, 3, 5, 7]
+
+At the final level:
+
+[2, 4, 6, 8] [1, 3, 5, 7]
+
+→ [1, 2, 3, 4, 5, 6, 7, 8]
+
+IMPORTANT OBSERVATION:
+
+At every merging level, all n elements are processed exactly once.
+
+For our example:
+
+Level       Total elements processed
+
+Level 1              8
+Level 2              8
+Level 3              8
+
+Therefore, the work done at each level is:
+
+O(n)
+
+STEP 4: CALCULATE TOTAL TIME COMPLEXITY
+
+We have calculated:
+
+• Number of levels = O(log n)
+• Work at each level = O(n)
+
+Total time complexity:
+
+Time Complexity = Work per level × Number of levels
+
+                = O(n) × O(log n)
+
+                = O(n log n)
+
+Therefore:
+
+Merge Sort Time Complexity = O(n log n)
+
+
+3. BEST, AVERAGE AND WORST CASE TIME COMPLEXITY
+
+Unlike some sorting algorithms, Merge Sort maintains the same asymptotic time complexity in all three cases.
+
+Case             Time Complexity       Explanation
+
+Best Case        O(n log n)             Even if the array is already sorted, Merge Sort still divides and merges the array.
+
+Average Case     O(n log n)             The algorithm performs the same divide-and-merge process.
+
+Worst Case       O(n log n)             Even when the array is in reverse order, it performs the same number of division levels and linear merging work per level.
+
+WHY IS THE BEST CASE ALSO O(n log n)?
+
+Consider an already sorted array:
+
+int arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+You might think that Merge Sort will finish quickly because the array is already sorted.
+
+However, Merge Sort does not stop just because the array is sorted.
+
+It still:
+
+1. Divides the array into two halves.
+2. Divides those halves further.
+3. Merges the subarrays.
+4. Continues until the complete array is merged.
+
+Therefore, even the best case takes O(n log n).
+
+
+4. SPACE COMPLEXITY OF MERGE SORT
+
+Space complexity tells us how much additional memory an algorithm requires as the input size increases.
+
+In your Merge Sort implementation, we need to consider two things:
+
+1. Temporary array used by the merge() function.
+2. Recursion stack used by recursive calls.
+
+Let's understand both.
+
+A. AUXILIARY ARRAY SPACE – O(n)
+
+In a standard Merge Sort implementation, the merge() function uses a temporary array to store elements while combining two sorted subarrays.
+
+For example:
+
+Left Subarray:  [2, 4, 8]
+
+Right Subarray: [1, 3, 6]
+
+Temporary Array:
+
+[1, 2, 3, 4, 6, 8]
+
+After merging, the sorted elements are copied back into the original array.
+
+Suppose the original array contains 8 elements.
+
+The temporary array may require space for 8 elements.
+
+Similarly:
+
+Input Size       Temporary Array Space
+
+5                O(5)
+10               O(10)
+100              O(100)
+n                O(n)
+
+Therefore:
+
+Auxiliary Array Space = O(n)
+
+B. RECURSION STACK SPACE – O(log n)
+
+Your mergeSort() function calls itself recursively:
+
+mergeSort(arr, si, mid);
+
+mergeSort(arr, mid+1, ei);
+
+Every recursive function call requires memory in the call stack.
+
+The stack stores information such as:
+
+• Function parameters.
+• Local variables.
+• Return addresses.
+• Execution state.
+
+Let's understand the maximum recursion depth.
+
+For an array of 8 elements:
+
+mergeSort(0, 7)
+       |
+       ↓
+mergeSort(0, 3)
+       |
+       ↓
+mergeSort(0, 1)
+       |
+       ↓
+mergeSort(0, 0)
+
+The recursion keeps dividing the array into half.
+
+Therefore, the maximum depth of recursion is approximately:
+
+log₂ n
+
+For 8 elements:
+
+log₂ 8 = 3
+
+So the recursion stack requires:
+
+Recursion Stack Space = O(log n)
+
+IMPORTANT:
+
+Although Merge Sort makes many recursive calls, they do not all remain active simultaneously.
+
+The maximum active recursion depth is logarithmic because the array is divided in half at each step.
+
+C. TOTAL SPACE COMPLEXITY
+
+Now combine both space requirements.
+
+Memory Usage             Space Complexity
+
+Temporary Array          O(n)
+Recursion Stack          O(log n)
+
+Total:
+
+Space Complexity = O(n) + O(log n)
+
+Since O(n) grows faster than O(log n), we consider the dominant term.
+
+Therefore:
+
+Space Complexity = O(n)
+
+Final Space Complexity = O(n)
+
+
+5. FINAL COMPLEXITY ANALYSIS
+
+For your standard Merge Sort implementation:
+
+Complexity Type               Result
+
+Best Case Time                O(n log n)
+Average Case Time             O(n log n)
+Worst Case Time               O(n log n)
+Auxiliary Array Space         O(n)
+Recursion Stack Space         O(log n)
+Total Auxiliary Space         O(n)
+
+
+6. IMPORTANT POINTS TO REMEMBER FOR EXAMS AND INTERVIEWS
+
+1. Merge Sort uses the Divide and Conquer approach.
+2. It divides the array into two halves recursively.
+3. The number of division levels is O(log n).
+4. Merging all elements at each level takes O(n) time.
+5. Therefore, total time complexity is O(n log n).
+6. It requires O(n) auxiliary space for the temporary array in the standard implementation.
+7. Its recursion stack requires O(log n) space.
+8. Its time complexity remains O(n log n) in best, average and worst cases.
+9. Merge Sort is a stable sorting algorithm when implemented with the usual stable merge procedure.
+
+
+7. QUICK MEMORY TRICK
+
+Remember these two calculations:
+
+TIME COMPLEXITY:
+
+Number of levels × Work per level
+
+O(log n) × O(n)
+
+= O(n log n)
+
+
+SPACE COMPLEXITY:
+
+Temporary Array + Recursion Stack
+
+O(n) + O(log n)
+
+= O(n)
+
+
