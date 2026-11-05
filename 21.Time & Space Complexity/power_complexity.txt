@@ -1,0 +1,630 @@
+# 1. First Code – Normal Recursion
+
+Normal Recursion
+
+### Code
+
+```
+public static int power(int a, int n) {
+
+    if (n == 0) {
+        return 1;
+    }
+
+    return a * power(a, n - 1);
+}
+```
+
+### Step 1: Understand how the code works
+
+Suppose:
+
+```
+power(2, 4);
+```
+
+We want to calculate:
+
+\[ 2^4 = 2 \times 2 \times 2 \times 2 = 16 \]
+
+The function calls itself with `n - 1` each time.
+
+Recursive calls:
+
+```
+power(2, 4)
+    2 * power(2, 3)
+            2 * power(2, 2)
+                    2 * power(2, 1)
+                            2 * power(2, 0)
+                                    return 1
+```
+
+Now the recursion returns:
+
+```
+power(2, 0) = 1
+
+power(2, 1) = 2 * 1 = 2
+
+power(2, 2) = 2 * 2 = 4
+
+power(2, 3) = 2 * 4 = 8
+
+power(2, 4) = 2 * 8 = 16
+```
+
+### Step 2: Time Complexity
+
+Look at the recursive call:
+
+```
+return a * power(a, n - 1);
+```
+
+Every function call reduces `n` by 1.
+
+For example, if `n = 4`:
+
+|Function call|Remaining n|
+|---|---|
+|power(2, 4)|4|
+|power(2, 3)|3|
+|power(2, 2)|2|
+|power(2, 1)|1|
+|power(2, 0)|0|
+
+Total function calls = n + 1.
+
+Each call performs constant work, excluding the recursive call.
+
+Therefore:
+
+\[ T(n) = T(n-1) + O(1) \]
+
+\[ \boxed{O(n)} \]
+
+Time Complexity: O(n)
+
+Why O(n)?
+
+Because if `n = 100`, the function needs approximately 101 calls.
+
+If `n = 1000`, it needs approximately 1001 calls.
+
+As `n` increases, the number of recursive calls increases linearly.
+
+### Step 3: Space Complexity
+
+Look at the recursive calls again.
+
+```
+power(2, 4)
+power(2, 3)
+power(2, 2)
+power(2, 1)
+power(2, 0)
+```
+
+Every function call needs memory in the recursion call stack.
+
+Until the base condition is reached, previous function calls remain in memory.
+
+For `n = 4`:
+
+Recursion stack
+
+power(2, 4)
+
+Level 1
+
+power(2, 3)
+
+Level 2
+
+power(2, 2)
+
+Level 3
+
+power(2, 1)
+
+Level 4
+
+power(2, 0)
+
+Level 5
+
+Five active function calls at the deepest point.
+
+Maximum recursion depth is proportional to `n`.
+
+Therefore:
+
+\[ \boxed{O(n)} \]
+
+Space Complexity: O(n)
+
+Final complexity:
+
+|Complexity|Result|
+|---|---|
+|Time|O(n)|
+|Space|O(n)|
+
+# 2. Second Code – Optimized-looking Recursion (Repeated Calls)
+
+Two Recursive Calls
+
+### Code
+
+```
+public static int power2(int a, int n) {
+
+    if (n == 0) {
+        return 1;
+    }
+
+    int halfPowerSq =
+        power2(a, n/2) * power2(a, n/2);
+
+    if (n % 2 != 0) {
+        return a * halfPowerSq;
+    }
+
+    return halfPowerSq;
+}
+```
+
+### Step 1: Understand how the code works
+
+This approach uses the idea of dividing the exponent by 2.
+
+For example:
+
+\[ 2^4 = 2^2 \times 2^2 \]
+
+And:
+
+\[ 2^2 = 2^1 \times 2^1 \]
+
+Instead of reducing `n` by 1, we divide it by 2.
+
+Important code:
+
+```
+int halfPowerSq =
+    power2(a, n/2) * power2(a, n/2);
+```
+
+Notice something carefully!
+
+We are calling the same recursive function TWO times.
+
+Let's understand with an example.
+
+Suppose:
+
+```
+power2(2, 4);
+```
+
+The recursive calls look like this:
+
+```
+                 power2(2, 4)
+                 /          \
+          power2(2, 2)    power2(2, 2)
+           /     \          /     \
+      power2(2,1) power2(2,1) power2(2,1) power2(2,1)
+```
+
+Every recursive call creates two more recursive calls.
+
+This is the important part of this code.
+
+### Step 2: Time Complexity
+
+Consider this statement:
+
+```
+int halfPowerSq =
+    power2(a, n/2) * power2(a, n/2);
+```
+
+There are TWO recursive calls.
+
+Each call receives `n/2`.
+
+Therefore, the recurrence relation is:
+
+\[ T(n) = 2T(n/2) + O(1) \]
+
+Using the recursion tree:
+
+|Level|Number of calls|
+|---|---|
+|0|1|
+|1|2|
+|2|4|
+|3|8|
+|4|16|
+
+The number of calls doubles at every level.
+
+The recursion depth is approximately:
+
+\[ \log_2 n \]
+
+Total number of calls is approximately:
+
+\[ 1+2+4+8+\cdots+n \]
+
+Using the geometric series:
+
+\[ 1+2+4+\cdots+n = O(n) \]
+
+Therefore:
+
+\[ \boxed{O(n)} \]
+
+Time Complexity: O(n)
+
+Why is it O(n) even though we divide n by 2?
+
+Because we make TWO recursive calls at every level.
+
+Dividing the input by 2 reduces the depth, but making two calls causes the total number of calls to grow linearly.
+
+### Step 3: Space Complexity
+
+Now look at the recursion tree again.
+
+```
+                 power2(2, 4)
+                 /          \
+          power2(2, 2)    power2(2, 2)
+           /     \          /     \
+      power2(2,1) ...     ...     ...
+```
+
+Although there are many total function calls, Java evaluates the multiplication operands sequentially.
+
+It completes the first recursive call before starting the second one.
+
+So both branches are not simultaneously stored on the recursion stack.
+
+The maximum recursion depth is:
+
+\[ \log_2 n \]
+
+Therefore:
+
+\[ \boxed{O(\log n)} \]
+
+Space Complexity: O(log n)
+
+Final complexity:
+
+|Complexity|Result|
+|---|---|
+|Time|O(n)|
+|Space|O(log n)|
+
+Important: This code looks optimized because it divides `n` by 2, but calling the same function twice makes its time complexity O(n).
+
+# 3. Third Code – Optimized Recursion (Binary Exponentiation)
+
+One Recursive Call
+
+### Code
+
+```
+public static int power3(int a, int n) {
+
+    if (n == 0) {
+        return 1;
+    }
+
+    int halfPower = power3(a, n/2);
+
+    int halfPowerSq = halfPower * halfPower;
+
+    if (n % 2 != 0) {
+        return a * halfPowerSq;
+    }
+
+    return halfPowerSq;
+}
+```
+
+### Step 1: Understand how the code works
+
+This code uses the same mathematical concept as the second code.
+
+But there is one important difference.
+
+Look at these statements:
+
+```
+int halfPower = power3(a, n/2);
+
+int halfPowerSq = halfPower * halfPower;
+```
+
+Here, we call the recursive function only ONE time.
+
+We store its result inside:
+
+```
+halfPower
+```
+
+Then we multiply the stored result by itself.
+
+Let's understand with an example.
+
+Suppose:
+
+```
+power3(2, 4);
+```
+
+We know:
+
+\[ 2^4 = 2^2 \times 2^2 \]
+
+Now follow the recursive calls:
+
+```
+power3(2, 4)
+       |
+power3(2, 2)
+       |
+power3(2, 1)
+       |
+power3(2, 0)
+       |
+     return 1
+```
+
+Only ONE recursive call is made at each level.
+
+### Step 2: Dry Run
+
+Let's calculate:
+
+```
+power3(2, 4);
+```
+
+|Function call|Calculation|Result|
+|---|---|---|
+|power3(2, 0)|Base condition|1|
+|power3(2, 1)|2 × 1 × 1|2|
+|power3(2, 2)|2 × 2|4|
+|power3(2, 4)|4 × 4|16|
+
+Notice that we calculate the half power only once and reuse its result.
+
+### Step 3: What happens when n is odd?
+
+Look at this condition:
+
+```
+if (n % 2 != 0) {
+    return a * halfPowerSq;
+}
+```
+
+Why do we need it?
+
+Consider:
+
+\[ 2^5 \]
+
+We can write:
+
+\[ 2^5 = 2 \times 2^2 \times 2^2 \]
+
+Therefore:
+
+\[ 2^5 = 2 \times 4 \times 4 = 32 \]
+
+When `n` is odd, we multiply by one additional `a`.
+
+For even `n`:
+
+\[ 2^4 = 2^2 \times 2^2 \]
+
+No additional multiplication by `a` is needed.
+
+### Step 4: Time Complexity
+
+Look at this line:
+
+```
+int halfPower = power3(a, n/2);
+```
+
+We make only ONE recursive call.
+
+And every time, `n` is divided by 2.
+
+For example, if `n = 16`:
+
+|Function call|n value|
+|---|---|
+|power3(2, 16)|16|
+|power3(2, 8)|8|
+|power3(2, 4)|4|
+|power3(2, 2)|2|
+|power3(2, 1)|1|
+|power3(2, 0)|0|
+
+The input becomes half at every step.
+
+Therefore:
+
+\[ T(n) = T(n/2) + O(1) \]
+
+After repeatedly dividing by 2:
+
+\[ \frac{n}{2},\frac{n}{4},\frac{n}{8},\ldots,1 \]
+
+The number of divisions needed is:
+
+\[ \log_2 n \]
+
+Therefore:
+
+\[ \boxed{O(\log n)} \]
+
+Time Complexity: O(log n)
+
+### Step 5: Space Complexity
+
+Look at the recursive calls:
+
+```
+power3(2, 16)
+power3(2, 8)
+power3(2, 4)
+power3(2, 2)
+power3(2, 1)
+power3(2, 0)
+```
+
+Each function call requires memory in the recursion stack.
+
+Maximum recursion depth:
+
+\[ \log_2 n \]
+
+Therefore:
+
+\[ \boxed{O(\log n)} \]
+
+Space Complexity: O(log n)
+
+Final complexity:
+
+|Complexity|Result|
+|---|---|
+|Time|O(log n)|
+|Space|O(log n)|
+
+# 4. Compare All Three Codes
+
+This is the most important part. Understand the difference between these three approaches.
+
+Code 1 – Normal Recursion
+
+n decreases by 1 · One recursive call
+
+# O(n)
+
+Time complexity
+
+# O(n)
+
+Space complexity
+
+Code 2 – Two Recursive Calls
+
+n divided by 2 · Two recursive calls
+
+# O(n)
+
+Time complexity
+
+# O(log n)
+
+Space complexity
+
+Code 3 – One Recursive Call
+
+n divided by 2 · One recursive call
+
+# O(log n)
+
+Time complexity
+
+# O(log n)
+
+Space complexity
+
+|Feature|Code 1|Code 2|Code 3|
+|---|---|---|---|
+|Recursive calls|1|2|1|
+|Input reduction|n - 1|n / 2|n / 2|
+|Time|O(n)|O(n)|O(log n)|
+|Space|O(n)|O(log n)|O(log n)|
+
+# 5. Test Your Understanding
+
+Let's check whether you understood these concepts. Try answering these MCQs.
+
+Complexity MCQ Test
+
+0/5 answered
+
+Q1. In Code 1, how does n change in every recursive call?
+
+n / 2
+
+n - 1
+
+n * 2
+
+n + 1
+
+Q2. Why does Code 2 have O(n) time complexity?
+
+It has two recursive calls at every level
+
+It has no base condition
+
+It reduces n by 1
+
+It uses a loop
+
+Q3. How many recursive calls does Code 3 make at each level?
+
+Two
+
+Three
+
+One
+
+n calls
+
+Q4. What is the time complexity of Code 3?
+
+O(n)
+
+O(n²)
+
+O(log n)
+
+O(1)
+
+Q5. What is the space complexity of Code 2?
+
+O(n)
+
+O(log n)
+
+O(n²)
+
+O(1)
+
+Submit answers
+
+My most important takeaway for you:
+
+When analyzing recursive code, always ask yourself these two questions:
+
+1. How much does the input decrease in every recursive call? (`n - 1`, `n / 2`, etc.)
+    
+2. How many recursive calls are made at each level? (One, two, or more?)
+    
